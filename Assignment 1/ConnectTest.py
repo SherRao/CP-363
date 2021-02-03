@@ -12,7 +12,6 @@ __updated__ = "2020-10-07"
 # Imports
 from Connect import Connect
 
-
 def test_connect():
     print("Standard Connection")
 

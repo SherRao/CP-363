@@ -1,4 +1,5 @@
 
+from Connect import Connect;
 
 
 def get_keywords(cursor, keyword_id=None):
@@ -20,7 +21,22 @@ def get_keywords(cursor, keyword_id=None):
             Sorted by keyword description
     -------------------------------------------------------
     """
-    return
+    try:   
+        sql = "SELECT * from keyword"
+        cursor.execute(sql)
+        rows = []
+        if(keyword_id is not None):
+            rows = cursor.fetchall();
+
+        else: 
+            for row in cursor.fetchall():
+                if(row.keyword_id == keyword_id):
+                    rows.append(row)
+    
+    except Exception as e:
+        print(str(e))
+
+    return rows
 
 
 def get_publications(cursor, member_id=None, pub_type_id=None):
@@ -45,7 +61,22 @@ def get_publications(cursor, member_id=None, pub_type_id=None):
             Sorted by publication title
     -------------------------------------------------------
     """
-    return
+    try:   
+        sql = "SELECT * from publication"
+        cursor.execute(sql)
+        rows = []
+        if(member_id is not None):
+            if(pub_type_id is not None):
+                for(row in cursor.fetchall()):
+                    
+                
+
+        else:
+
+    except Exception as e:
+        print(str(e))
+
+    return rows
 
 
 def get_member_expertises(cursor, member_id=None, keyword_id=None):
