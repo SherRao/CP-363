@@ -1,6 +1,4 @@
-
 from Connect import Connect;
-
 
 def get_keywords(cursor, keyword_id=None):
     """
@@ -21,17 +19,20 @@ def get_keywords(cursor, keyword_id=None):
             Sorted by keyword description
     -------------------------------------------------------
     """
+    rows = []
     try:   
         sql = "SELECT * from keyword"
-        cursor.execute(sql)
-        rows = []
         if(keyword_id is not None):
-            rows = cursor.fetchall();
+            sql += " WHERE keyword_id = %s"
 
-        else: 
-            for row in cursor.fetchall():
-                if(row.keyword_id == keyword_id):
-                    rows.append(row)
+        sql += " ORDER BY k_desc"
+
+        data = []
+        if(keyword_id is not None):
+            data.append(keyword_id)
+
+        cursor.execute(sql, data)
+        rows = cursor.fetchall()
     
     except Exception as e:
         print(str(e))
@@ -61,21 +62,26 @@ def get_publications(cursor, member_id=None, pub_type_id=None):
             Sorted by publication title
     -------------------------------------------------------
     """
-    try:   
-        sql = "SELECT * from publication"
-        cursor.execute(sql)
-        rows = []
-        if(member_id is not None):
-            if(pub_type_id is not None):
-                for(row in cursor.fetchall()):
-                    
-                
+    rows = []
+    sql = "SELECT * from pub"
+    if(member_id is not None):
+        sql += " WHERE member_id = %s"
+        if(pub_type_id is not None):
+            sql += " AND pub_type_id = %s"
 
-        else:
+    elif(pub_type_id is not None):
+        sql += " WHERE pub_type_id = %s"
 
-    except Exception as e:
-        print(str(e))
+    sql += " ORDER BY p_title"
+    data = []
+    if(member_id is not None):
+        data.append(member_id)
 
+    if(pub_type_id is not None):
+        data.append(pub_type_id)
+
+    cursor.execute(sql, data)
+    rows = cursor.fetchall()
     return rows
 
 
@@ -101,7 +107,33 @@ def get_member_expertises(cursor, member_id=None, keyword_id=None):
             Sorted by member last name, first name, and keyword description
     -------------------------------------------------------
     """
-    return
+    rows = []
+    try:   
+        sql = "SELECT * from v_member_keyword"
+        if(member_id is not None):
+            sql += " WHERE member_id = %s"
+            if(keyword_id is not None):
+                sql += " AND keyword_id = %s"
+
+        elif(keyword_id is not None):
+            sql += " WHERE keyword_id = %s"
+
+        sql += " ORDER BY last_name, first_name, k_desc"
+
+        data = []
+        if(member_id is not None):
+            data.append(member_id)
+
+        if(keyword_id is not None):
+            data.append(keyword_id)
+
+        cursor.execute(sql, data)
+        rows = cursor.fetchall()
+    
+    except Exception as e:
+        print(str(e))
+
+    return rows
     
 
 def get_expertises(cursor, keyword=None, supp_key=None):
@@ -126,4 +158,30 @@ def get_expertises(cursor, keyword=None, supp_key=None):
             Sorted by keyword description, supplementary keyword description
     -------------------------------------------------------
     """
-    return
+    rows = []
+    try:   
+        sql = "SELECT * from v_keyword_supp_key"
+        if(keyword is not None):
+            sql += " WHERE keyword_id = %s"
+            if(supp_key is not None):
+                sql += " AND supp_key_id = %s"
+
+        elif(supp_key is not None):
+            sql += " WHERE supp_key_id = %s"
+
+        sql += " ORDER BY k_desc, sk_desc"
+
+        data = []
+        if(keyword is not None):
+            data.append(keyword)
+
+        if(supp_key is not None):
+            data.append(supp_key)
+
+        cursor.execute(sql, data)
+        rows = cursor.fetchall()
+    
+    except Exception as e:
+        print(str(e))
+
+    return rows
