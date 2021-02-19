@@ -1,4 +1,14 @@
-from Connect import Connect;
+"""
+------------------------------------------------------------------------
+Assignment #1
+------------------------------------------------------------------------
+Author:  Nausher Rao
+ID:      190906250
+Email:   raox6250@mylaurier.ca
+Section: CP363 Winter 2021
+__updated__ = "2021-02-01"
+------------------------------------------------------------------------
+"""
 
 def get_keywords(cursor, keyword_id=None):
     """
@@ -162,12 +172,12 @@ def get_expertises(cursor, keyword=None, supp_key=None):
     try:   
         sql = "SELECT * from v_keyword_supp_key"
         if(keyword is not None):
-            sql += " WHERE keyword_id = %s"
+            sql += " WHERE k_desc LIKE %s"
             if(supp_key is not None):
-                sql += " AND supp_key_id = %s"
+                sql += " AND sk_desc LIKE %s"
 
         elif(supp_key is not None):
-            sql += " WHERE supp_key_id = %s"
+            sql += " WHERE sk_desc LIKE %s"
 
         sql += " ORDER BY k_desc, sk_desc"
 
